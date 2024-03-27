@@ -42,8 +42,8 @@ services:
       - 4100:4100
     environment:
         - PORT=4100
-        - REACT_APP_GATEWAY_URL=http://frida-gateway:8000
-        - REACT_APP_AUTH_URL=http://authentication-service:4200
+        - REACT_APP_GATEWAY_URL=https://gateway.project-frida.online
+        - REACT_APP_AUTH_URL=https://auth.project-frida.online
     networks:
       - internal_network
 
