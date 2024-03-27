@@ -44,8 +44,15 @@ services:
         - PORT=4100
         - REACT_APP_GATEWAY_URL=https://gateway.project-frida.online
         - REACT_APP_AUTH_URL=https://auth.project-frida.online
-    networks:
-      - internal_network
+
+  frida-storefront:
+    image: daver2910/frida-storefront-ui:latest
+    restart: always
+    ports:
+      - 4000:4000
+    environment:
+      - PORT=4000
+      - REACT_APP_GATEWAY_URL=https://gateway.project-frida.online
 
 networks:
   internal_network:
