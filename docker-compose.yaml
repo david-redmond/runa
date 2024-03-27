@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  authentication-service:
+    image: daver2910/authentication-service:latest
+    restart: always
+    ports:
+      - 4200:4200
+    environment:
+      - PORT=4200
+      - USER_SERVICE=http://user-service:8010
+      - SECRET_KEY=david-is-cool
+    networks:
+      - internal_network
+
+  frida-gateway:
+    image: daver2910/frida-gateway:latest
+    restart: always
+    ports:
+      - 8000:8000
+    env_file:
+      - internal.env
+    environment:
+      - PORT=8000
+    networks:
+      - internal_network
+
+  user-service:
+    image: daver2910/user-service:latest
+    restart: always
+    env_file:
+      - internal.env
+    environment:
+      - PORT=8010
+    networks:
+      - internal_network
+
+  frida-admin:
+    image: daver2910/frida-admin:latest
+    restart: always
+    ports:
+      - 4100:4100
+    environment:
+        - PORT=4100
+        - REACT_APP_GATEWAY_URL=http://frida-gateway:8000
+        - REACT_APP_AUTH_URL=http://authentication-service:4200
+    networks:
+      - internal_network
+
+networks:
+  internal_network:
+    driver: bridge
