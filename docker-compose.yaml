@@ -52,7 +52,7 @@ services:
       - 4000:4000
     environment:
       - PORT=4000
-      - REACT_APP_GATEWAY_URL=https://gateway.project-frida.online
+      - REACT_APP_ENDPOINT=https://gateway.project-frida.online
 
 networks:
   internal_network:
