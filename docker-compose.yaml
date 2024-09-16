@@ -8,13 +8,13 @@ services:
       - 4200:4200
     environment:
       - PORT=4200
-      - USER_SERVICE=http://user-service:8010
       - SECRET_KEY=david-is-cool
+      - MONGODB_URI=mongodb+srv://Development:Password.0@cluster0.lpdtr.mongodb.net/oldFriends?retryWrites=true&w=majority
     networks:
       - internal_network
 
-  frida-gateway:
-    image: daver2910/frida-gateway:latest
+  runa-gateway:
+    image: daver2910/runa-gateway:latest
     restart: always
     ports:
       - 8000:8000
@@ -22,37 +22,68 @@ services:
       - internal.env
     environment:
       - PORT=8000
+      - USER_SERVICE=http://user-service:8010
+      - POSTS_SERVICE=http://posts-service:8011
+      - SECRET_KEY=david-is-cool
     networks:
       - internal_network
 
   user-service:
     image: daver2910/user-service:latest
     restart: always
+    ports:
+      - 8010:8010
     env_file:
       - internal.env
     environment:
       - PORT=8010
+      - MONGODB_URI=mongodb+srv://Development:Password.0@cluster0.lpdtr.mongodb.net/oldFriends?retryWrites=true&w=majority
     networks:
       - internal_network
 
-  frida-admin:
-    image: daver2910/frida-admin:latest
+  posts-service:
+    image: daver2910/posts-service:latest
     restart: always
     ports:
-      - 4100:4100
+      - 8011:8011
+    env_file:
+      - internal.env
     environment:
-        - PORT=4100
-        - REACT_APP_GATEWAY_URL=https://gateway.project-frida.online
-        - REACT_APP_AUTH_URL=https://auth.project-frida.online
+      - PORT=8011
+      - MONGODB_URI=mongodb+srv://Development:Password.0@cluster0.lpdtr.mongodb.net/oldFriends?retryWrites=true&w=majority
+    networks:
+      - internal_network
 
-  frida-storefront:
-    image: daver2910/frida-storefront-ui:latest
+  images-service:
+    image: daver2910/images-service:latest
     restart: always
     ports:
-      - 4000:4000
+      - 8012:8012
+    env_file:
+      - internal.env
     environment:
-      - PORT=4000
-      - REACT_APP_ENDPOINT=https://gateway.project-frida.online
+      - PORT=8012
+    networks:
+      - internal_network
+
+#  frida-admin:
+#    image: daver2910/frida-admin:latest
+#    restart: always
+#    ports:
+#      - 4100:4100
+#    environment:
+#        - PORT=4100
+#        - REACT_APP_GATEWAY_URL=https://gateway.project-frida.online
+#        - REACT_APP_AUTH_URL=https://auth.project-frida.online
+#
+#  frida-storefront:
+#    image: daver2910/frida-storefront-ui:latest
+#    restart: always
+#    ports:
+#      - 4000:4000
+#    environment:
+#      - PORT=4000
+#      - REACT_APP_ENDPOINT=https://gateway.project-frida.online
 
 networks:
   internal_network:
